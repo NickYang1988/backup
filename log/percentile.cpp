@@ -2,58 +2,39 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <vector>
 #include <algorithm>
 #include <iostream>
+#include <fstream>
 
 int percs[] = {90, 95, 99};
 
-static int cmp(const int *a, const int *b)
+int compare_greater(const int a, const int b)
 {
-    if (*a < *b)
-    {
-        return -1;
-    }
+    return a > b;
+}
 
-    if (*a > *b)
-    {
-        return 1;
-    }
-
-    return 0;
+int compare_less(const int a, const int b)
+{
+    return a < b;
 }
 
 int main()
 {
     //read file
+    std::ifstream file("time.log", std::ios::in | std::ios::binary);
+    std::string line;
+    std::vector<int> all_times;
+    while (getline(file, line))
+    {
+        all_times.push_back(atoi(line.c_str()));
+    }
 
-    int count = 20;
-    int *all_times = new int[count];
-    all_times[0] = 1000;
-    all_times[1] = 1300;
-    all_times[2] = 1230;
-    all_times[3] = 1210;
-    all_times[4] = 1560;
-    all_times[5] = 1410;
-    all_times[6] = 1300;
-    all_times[7] = 5000;
-    all_times[8] = 1330;
-    all_times[9] = 1700;
-    all_times[10] = 1200;
-    all_times[11] = 1300;
-    all_times[12] = 1230;
-    all_times[13] = 1210;
-    all_times[14] = 1560;
-    all_times[15] = 1410;
-    all_times[16] = 1300;
-    all_times[17] = 1500;
-    all_times[18] = 12140;
-    all_times[19] = 1700;
-
-    qsort(all_times, count, sizeof(int), (int (*)(const void *, const void *))cmp);
-
+    //sort by ASC
+    std::sort(all_times.begin(), all_times.end(), std::less<int>());
+    int count = all_times.size();
     if (count <= 0)
     {
-        delete []all_times;
         std::cout << "not find any time" << std::endl;
         return -1;
     }
@@ -75,6 +56,5 @@ int main()
         }
     }
 
-    delete []all_times;
     return 0;
 }
