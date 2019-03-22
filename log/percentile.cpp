@@ -19,10 +19,29 @@ int compare_less(const int a, const int b)
     return a < b;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+    if (argc != 2)
+    {
+        std::cout << "Usage: ./percentile log_path" << std::endl;
+        std::cout << "e.g. ./percentile /var/log/httpd/" << std::endl;
+        return -1;
+    }
+    
+    //add slash
+    std::string path = argv[1];
+    if (path.find_last_of('/') != path.length())
+    {
+        path += "/";
+    }
+    
+    //shell cmd
+    std::string shell_cmd = std::string("cat ") + path + "*.log | awk -F ' ' '{print $NF}' > time.result";
+    //run shell
+    std::system(shell_cmd.c_str());
+
     //read file
-    std::ifstream file("time.log", std::ios::in | std::ios::binary);
+    std::ifstream file("time.result", std::ios::in | std::ios::binary);
     std::string line;
     std::vector<int> all_times;
     while (getline(file, line))
