@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <iostream>
 
-#define round_ms(a) ((int64_t)((a) + 400) / 1000)
 int percs[] = {90, 95, 99};
 
 static int cmp(const int *a, const int *b)
